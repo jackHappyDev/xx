@@ -46,15 +46,15 @@ metadata =MetaData(engine)
 # metadata.create_all(engine)
 
 #创建播放信息的视频列表
-VideoPlayInfo = Table(
-    'VideoPlayInfo',metadata,
-    Column('id', Integer, primary_key=True, autoincrement=True),
-    Column('videoName',String(100)),
-    Column('videoImg',String(100)),
-    Column('videoInfoContent',String(2500)),
-    Column('videoPlayAdd',String(200)),
-)
-metadata.create_all(engine)
+# VideoPlayInfo = Table(
+#     'VideoPlayInfo',metadata,
+#     Column('id', Integer, primary_key=True, autoincrement=True),
+#     Column('videoName',String(100)),
+#     Column('videoImg',String(100)),
+#     Column('videoInfoContent',String(2500)),
+#     Column('videoPlayAdd',String(200)),
+# )
+# metadata.create_all(engine)
 
 
 
@@ -160,6 +160,7 @@ def getCurrentVideDetail(path,idx):
     videoDetailContent = ''
     videoPlayAdd = []
     videoDownLoadAdd = ''
+    jdx = 0
     for v in soup.find_all('div',attrs={'class':'vodImg'}):
        xx =  v.find_all('img')[0]
        videoName = xx['alt']
@@ -169,14 +170,16 @@ def getCurrentVideDetail(path,idx):
         if str.endswith('.m3u8'):
             videoPlayAdd.append(str)
     cc = soup.find(attrs={'class':'vodplayinfo'})
-    videoInfo['videoName'] = videoName
-    videoInfo['videoImg'] = videoImg
-    videoInfo['videoDetailContent'] = cc.string
-    videoInfo['videoPlayAd'] = videoPlayAdd
-    print(videoInfo)
+    # videoInfo['videoName'] = videoName
+    # videoInfo['videoImg'] = videoImg
+    # videoInfo['videoDetailContent'] = cc.string
+    # videoInfo['videoPlayAd'] = videoPlayAdd
+    print(videoName)
     if len(videoPlayAdd)>1 :
+        jdx += 1
         videoPlayAdd = videoPlayAdd[0]
-        dxx = VideoPlayInfo(id=idx, videoName=videoName, videoImg=videoImg, videoInfoContent=cc.string ,videoPlayAdd=videoPlayAdd)
+        print(videoName)
+        dxx = VideoPlayInfo(id=(idx*50+jdx), videoName=videoName, videoImg=videoImg, videoInfoContent=cc.string ,videoPlayAdd=videoPlayAdd)
         session.add_all([dxx])
         session.commit()
     # return  videoInfo
@@ -198,6 +201,8 @@ def getSraechList(searchContent):
     print(xxlist)
     return xxlist
 
+
+
 #搜索每个页面的m3u8
 def getVideoAddFromPath(path,name):
     response = requests.post(url=path, headers=headers)
@@ -217,8 +222,31 @@ def getVideoAddFromPath(path,name):
     # print(videolist)
     return videolist
 
-#获取所有网站的影片列表信息
-# def getAllNetReqInfo(path):
+
+
+
+
+#获取每页数据的说有链接详情全文
+def getPerPageToDetailList(path,idx):
+    response = requests.post(url=path, headers=headers)
+    soup = BeautifulSoup(response.text)
+    # print(response.text)
+    xxlist = []
+    for v in soup.find_all('span', attrs={'class': 'xing_vb4'}):
+        v = v.find_all('a')[0]
+        title = v.string
+        url = BaseUrl + v['href']
+        getCurrentVideDetail(url,idx)
+
+
+
+#获取所有网站的影片网址列表
+def getAllNetReqInfo():
+    totalPage = getAllPageSize('http://www.okzy.co/')
+    for i in range(1,int(totalPage)):
+        perpageUrl = BaseUrl+'/?m=vod-index-pg-'+str(i)+'.html'
+        # print(perpageUrl)
+        getPerPageToDetailList(perpageUrl,i)
 
 
 #获取所有的页面的页数
@@ -230,7 +258,6 @@ def getAllPageSize(path):
         for x in v.find_all('a'):
             list.append(x)
         page = list[-1]['href'].split('-')[-1].split('.')[0]
-        print(page)
         return page
 
 
@@ -240,6 +267,7 @@ def getAllPageSize(path):
 if __name__ == '__main__':
     # getSraechList('庆余年')
     # getVideoCategoryList()
-    # getCurrentVideDetail('http://www.okzy.co//?m=vod-detail-id-49082.html')
+    # getCurrentVideDetail('http://www.okzy.co//?m=vod-index-pg-1.html','1')
     # searchDataInfoById('DY')
-    getAllPageSize('http://www.okzy.co/')
+    # getAllPageSize('http://www.okzy.co/')
+    getAllNetReqInfo()
