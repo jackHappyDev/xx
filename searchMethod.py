@@ -46,15 +46,15 @@ metadata =MetaData(engine)
 # metadata.create_all(engine)
 
 #创建播放信息的视频列表
-# VideoPlayInfo = Table(
-#     'VideoPlayInfo',metadata,
-#     Column('id', Integer, primary_key=True, autoincrement=True),
-#     Column('videoName',String(100)),
-#     Column('videoImg',String(100)),
-#     Column('videoInfoContent',String(2500)),
-#     Column('videoPlayAdd',String(200)),
-# )
-# metadata.create_all(engine)
+VideoPlayInfo = Table(
+    'VideoPlayInfo',metadata,
+    Column('id', Integer, primary_key=True, autoincrement=True),
+    Column('videoName',String(100)),
+    Column('videoImg',String(100)),
+    Column('videoInfoContent',String(2500)),
+    Column('videoPlayAdd',String(200)),
+)
+metadata.create_all(engine)
 
 
 
@@ -179,7 +179,7 @@ def getCurrentVideDetail(path,idx):
         jdx += 1
         videoPlayAdd = videoPlayAdd[0]
         print(videoName)
-        dxx = VideoPlayInfo(id=(idx*50+jdx), videoName=videoName, videoImg=videoImg, videoInfoContent=cc.string ,videoPlayAdd=videoPlayAdd)
+        dxx = VideoPlayInfo(videoName=videoName, videoImg=videoImg, videoInfoContent=cc.string ,videoPlayAdd=videoPlayAdd)
         session.add_all([dxx])
         session.commit()
     # return  videoInfo
