@@ -98,6 +98,9 @@ class VideoM3u8List(Base):
     fzid = Column(Integer)
 
 
+
+
+
 #查
 def searchDataInfoById(d):
     infox = session.query(MoviesInfo).filter(MoviesInfo.tp == d).all()
@@ -114,7 +117,36 @@ def searchDataInfoById(d):
     # return ulist
     getDataFromCategoryInfoSearch(ulist)
 
+
+def getDataFromCategoryInfoSearch(list):
+    jdx = 0
+    for i in range(len(list)):
+        url = list[i]['href']
+        title = list[i]['title']
+        did = list[i]['id']
+        bidx = (i+1)*10000
+        response = requests.get(url=url,headers=headers)
+        soup =BeautifulSoup(response.text)
+        for v in soup.find_all('span',attrs={'class':'xing_vb4'}):
+            jdx += 1
+            info = v.find_all('a')[0]
+            # dxx = MoviesDetailListInfo(id=(jdx + bidx), title=info.text, link=BaseUrl + info['href'], moveType=title ,did=did)
+            # session.add_all([dxx])
+            # session.commit()
+            getCurrentVideDetail(BaseUrl + info['href'],jdx)
+            # print(info.text,info['href'])
+
+
+
+
+
+
+
+########################################################################################################
+########################################################################################################
 #数据路存储分类信息
+########################################################################################################
+########################################################################################################
 def getVideoCategoryList():
     cateList =['m1','m2','m3','m4']
     response = requests.get(url=BaseUrl,headers=headers)
@@ -140,26 +172,11 @@ def getVideoCategoryList():
 
 
 
-def getDataFromCategoryInfoSearch(list):
-    jdx = 0
-    for i in range(len(list)):
-        url = list[i]['href']
-        title = list[i]['title']
-        did = list[i]['id']
-        bidx = (i+1)*10000
-        response = requests.get(url=url,headers=headers)
-        soup =BeautifulSoup(response.text)
-        for v in soup.find_all('span',attrs={'class':'xing_vb4'}):
-            jdx += 1
-            info = v.find_all('a')[0]
-            # dxx = MoviesDetailListInfo(id=(jdx + bidx), title=info.text, link=BaseUrl + info['href'], moveType=title ,did=did)
-            # session.add_all([dxx])
-            # session.commit()
-            getCurrentVideDetail(BaseUrl + info['href'],jdx)
-            # print(info.text,info['href'])
-
-
+########################################################################################################
+########################################################################################################
 #在线搜索结果
+########################################################################################################
+########################################################################################################
 def getSraechList(searchContent):
     keyWords = {'m': 'vod-search', 'wd':searchContent, 'submit': 'search'}
     response =requests.post(url=BASE_FIRSTURL,params=keyWords,headers=headers)
@@ -197,11 +214,14 @@ def getVideoAddFromPath(path,name):
     return videolist
 
 
+########################################################################################################
+########################################################################################################
+#根据关键字 数据库搜索 查找每个影片对应的信息 远程查询关键字派和jsonify
+########################################################################################################
+########################################################################################################
 
-
-#根据id 查找每个影片对应的信息
 def getFilterVideoinfoById(kw):
-    infox = session.query(VideoPlayInfo).filter(VideoPlayInfo.videoName.like('%'+kw+'%')).all()
+    infox = session.query(VideoPlayInfo).filter(VideoPlayInfo.videoName.like('%'+kw+'%')).filter(VideoPlayInfo.videoInfoContent.like('%'+kw+'%')).all()
     session.commit()
     rtList =[]
     print(str(len(infox)))
@@ -218,15 +238,25 @@ def getFilterVideoinfoById(kw):
         idf['videoPlayAdd'] = addList
         # print(idf,len(addList))
         rtList.append(idf)
-    print(rtList)
+    return rtList
 
 
 
+########################################################################################################
+#####################################数据库采集操作采集远程数据库信息#########################################
+########################################################################################################
+########################################################################################################
 
-
+#获取所有网站的影片网址列表
+def getAllNetReqInfo():
+    totalPage = getAllPageSize('http://www.okzy.co/')
+    for i in range(1,int(totalPage)):
+        perpageUrl = BaseUrl+'/?m=vod-index-pg-'+str(i)+'.html'
+        # print(perpageUrl)
+        getPerPageToDetailList(perpageUrl,i)
 
 #获取每一个分类下面的每一行数据的信息
-#获取每个页面的详细信息 方便布局以及播放
+#获取每个页面的详细信息 方便布局以及播放 存储数据库
 def getCurrentVideDetail(path,idx):
     response = requests.get(url=path,headers=headers)
     soup =BeautifulSoup(response.text)
@@ -256,8 +286,6 @@ def getCurrentVideDetail(path,idx):
             session.add(dxx1)
             session.commit()
 
-    # return  videoInfo
-
 
 #获取每页数据的说有链接详情全文
 def getPerPageToDetailList(path,idx):
@@ -273,15 +301,6 @@ def getPerPageToDetailList(path,idx):
 
 
 
-#获取所有网站的影片网址列表
-def getAllNetReqInfo():
-    totalPage = getAllPageSize('http://www.okzy.co/')
-    for i in range(1,int(totalPage)):
-        perpageUrl = BaseUrl+'/?m=vod-index-pg-'+str(i)+'.html'
-        # print(perpageUrl)
-        getPerPageToDetailList(perpageUrl,i)
-
-
 #获取所有的页面的页数
 def getAllPageSize(path):
     response = requests.post(url=path, headers=headers)
@@ -293,17 +312,60 @@ def getAllPageSize(path):
         page = list[-1]['href'].split('-')[-1].split('.')[0]
         return page
 
+########################################################################################################
+########################################################################################################
+########################################################################################################
 
 
+
+
+def getTest(path):
+    response = requests.get(url=path,headers=headers)
+    soup =BeautifulSoup(response.text)
+    videoInfo = {}
+    videoName = ''
+    videoImg = ''
+    videoDetailContent = ''
+    videoPlayAdd = []
+    videoOnLinePlayAdd = []
+    videoDownLoadAdd = []
+    actorer = ''
+    videoNickName = ''
+    Director = ''
+
+    for v in soup.find_all('div',attrs={'class':'vodImg'}):
+       xx =  v.find_all('img')[0]
+       videoName = xx['alt']
+       videoImg = xx['src']
+    for v in soup.find_all('input',attrs={'name':'copy_sel'}):
+        str = v['value']
+        if str.endswith('.m3u8'):
+            videoPlayAdd.append(str)
+        elif str.endswith('.mp4'):
+            videoDownLoadAdd.append(str)
+        else:
+            videoOnLinePlayAdd.append(str)
+    for v in soup.find_all('div',attrs={'class':'vodinfobox'}):
+        # print(v.find_all('span'))
+        xxlist = v.find_all('span')
+        videoNickName = xxlist[0].string
+        Director = xxlist[1].string
+        actorer = xxlist[2].string
+    cc = soup.find(attrs={'class':'vodplayinfo'})
+    videoDetailContent = cc.string
+    print(videoNickName,'\n',Director,'\n',actorer)
+    print(videoName,'\n',videoImg,'\n',videoDownLoadAdd,'\n',videoPlayAdd,'\n',videoDetailContent,'\n',videoOnLinePlayAdd)
 
 
 if __name__ == '__main__':
-    # getSraechList('庆余年')
+    getSraechList('007')
     # getVideoCategoryList()
     # getCurrentVideDetail('http://www.okzy.co//?m=vod-index-pg-1.html','1')
     # searchDataInfoById('DY')
     # getAllPageSize('http://www.okzy.co/')
 
     #爬取所有页面的数据
-    getAllNetReqInfo()
+    # getAllNetReqInfo()
     # getFilterVideoinfoById('大明')
+
+    # getTest('http://www.okzy.co//?m=vod-detail-id-45018.html')
