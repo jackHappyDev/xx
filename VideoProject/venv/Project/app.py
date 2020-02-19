@@ -16,9 +16,6 @@ def hello():
 def kwSearchMethod():
     kw = request.args.get('kw')
     list = VideoModu.getFilterVideoinfoById(kw)
-    print(80*'*')
-    print(list)
-    print(80*'*')
     dt = ResponseMethod(1,'ok',list)
     return jsonify(dt)
 

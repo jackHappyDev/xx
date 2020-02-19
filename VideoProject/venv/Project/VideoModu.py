@@ -97,7 +97,7 @@ def getSraechList(searchContent):
 
 #搜索每个页面的m3u8
 def getVideoAddFromPath(path,name):
-    response = requests.post(url=path, headers=headers)
+    response = requests.post(url=path, headers=VideoDataBase.headers)
     soup = BeautifulSoup(response.text)
     videolist = []
     currentIdx = 1
@@ -268,7 +268,7 @@ if __name__ == '__main__':
 
     #爬取所有页面的数据
     # getAllNetReqInfo()
-    getFilterVideoinfoById('大明')
+    # getFilterVideoinfoById('大明')
 
     # getTest('http://www.okzy.co//?m=vod-detail-id-45018.html')
     # tpInsert()
