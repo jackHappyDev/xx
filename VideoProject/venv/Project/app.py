@@ -11,7 +11,7 @@ Bootstrap(app)
 @app.route('/')
 def hello():
 
-    return render_template('index.html',name='哈哈')
+    return render_template('index.html',name='https://rpg.pic-imges.com/pic/upload/vod/2019-12/1576595925.jpg')
 
 
 #关键字搜索
