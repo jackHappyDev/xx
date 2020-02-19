@@ -75,7 +75,6 @@ def getVideoCategoryList():
                 info['href'] = VideoDataBase.BaseUrl + xxx['href']
                 info['tp'] = tpp
                 xxlist.append(info)
-    # print(xxlist)
     return xxlist
 
 

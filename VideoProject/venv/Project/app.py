@@ -1,4 +1,4 @@
-from flask import Flask,request,url_for,redirect,make_response,send_file, send_from_directory,jsonify,render_template
+from flask import Flask,render_template,request,url_for,redirect,make_response,send_file, send_from_directory,jsonify
 from os import *
 from Project import VideoModu
 
@@ -7,8 +7,7 @@ app = Flask(__name__)
 #启动测试
 @app.route('/')
 def hello():
-
-    return 'Hello world!'
+    return render_template('1.html',name='哈哈')
 
 
 #关键字搜索
