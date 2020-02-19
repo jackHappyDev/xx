@@ -53,8 +53,9 @@ def getVideoCategoryList():
     response = requests.get(url=VideoDataBase.BaseUrl, headers=VideoDataBase.headers)
     soup =BeautifulSoup(response.text)
     jdex = 1
+    xxlist = []
     for i in  range(len(cateList)):
-        xxlist = []
+        info = {}
         for v in soup.find_all('div',attrs={'id':cateList[i]}):
             for xxx in v.find_all('a'):
                 jdex += 1
@@ -67,9 +68,15 @@ def getVideoCategoryList():
                     tpp = 'ZY'
                 else:
                     tpp = 'DH'
-                dxx = VideoDataBase.MoviesInfo(id=(jdex + 10001), title=xxx.text, href=VideoDataBase.BaseUrl + xxx['href'], tp=tpp)
-                VideoDataBase.session.add_all([dxx])
-                VideoDataBase.session.commit()
+                # dxx = VideoDataBase.MoviesInfo(id=(jdex + 10001), title=xxx.text, href=VideoDataBase.BaseUrl + xxx['href'], tp=tpp)
+                # VideoDataBase.session.add_all([dxx])
+                # VideoDataBase.session.commit()
+                info['title'] = xxx.text
+                info['href'] = VideoDataBase.BaseUrl + xxx['href']
+                info['tp'] = tpp
+                xxlist.append(info)
+    # print(xxlist)
+    return xxlist
 
 
 
@@ -261,7 +268,7 @@ def getTest(path):
 
 if __name__ == '__main__':
     # getSraechList('007')
-    # getVideoCategoryList()
+    getVideoCategoryList()
     # getCurrentVideDetail('http://www.okzy.co//?m=vod-index-pg-1.html','1')
     # searchDataInfoById('DY')
     # getAllPageSize('http://www.okzy.co/')

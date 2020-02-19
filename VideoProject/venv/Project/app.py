@@ -16,7 +16,14 @@ def hello():
 def kwSearchMethod():
     kw = request.args.get('kw')
     list = VideoModu.getFilterVideoinfoById(kw)
-    dt = ResponseMethod(1,'ok',list)
+    dt = ResponseMethod(0,'ok',list)
+    return jsonify(dt)
+
+#获取首页信息
+@app.route('/getFrontpage',methods=['POST','GET'])
+def getFrontpage():
+    list = VideoModu.getVideoCategoryList()
+    dt = ResponseMethod(0, 'ok', list)
     return jsonify(dt)
 
 
