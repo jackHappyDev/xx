@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 from Project import VideoDataBase
 import requests
+import  sys
 
 #查
 def searchDataInfoById(d):
@@ -183,16 +184,25 @@ def getCurrentVideDetail(path,idx):
         if str.endswith('.m3u8'):
             videoPlayAdd.append(str)
     cc = soup.find(attrs={'class':'vodplayinfo'})
-    print(80*'*'+videoName+80*'*')
+    content = cc.text
+    if len(content) > 2500:
+        content = content[:2499]
     if len(videoPlayAdd)>1 :
-        dxx = VideoDataBase.VideoPlayInfo(videoName=videoName, videoImg=videoImg, videoInfoContent=cc.string, videoPlayAdd='1')
-        VideoDataBase.session.add_all([dxx])
-        VideoDataBase.session.commit()
-        for i in range(0,len(videoPlayAdd)):
-            print(videoPlayAdd[i])
-            dxx1 = VideoDataBase.VideoM3u8List(playAdd=videoPlayAdd[i], fzid=dxx.id)
-            VideoDataBase.session.add(dxx1)
+        print(80 * '*' + videoName + 80 * '*')
+        ulist = VideoDataBase.session.query(VideoDataBase.VideoPlayInfo).filter(VideoDataBase.VideoPlayInfo.videoName.like('%'+videoName+'%')).all()
+        if len(ulist) <= 0:
+            dxx = VideoDataBase.VideoPlayInfo(videoName=videoName, videoImg=videoImg, videoInfoContent=content, videoPlayAdd='1')
+            VideoDataBase.session.add_all([dxx])
             VideoDataBase.session.commit()
+            for i in range(0,len(videoPlayAdd)):
+                print(videoPlayAdd[i])
+                dxx1 = VideoDataBase.VideoM3u8List(playAdd=videoPlayAdd[i], fzid=dxx.id)
+                VideoDataBase.session.add(dxx1)
+                VideoDataBase.session.commit()
+        else:
+            if idx  > 1:
+                print('已经爬取到重复的了')
+                sys.exit(0)
 
 
 #获取每页数据的说有链接详情全文
@@ -264,16 +274,27 @@ def getTest(path):
     print(videoNickName,'\n',Director,'\n',actorer)
     print(videoName,'\n',videoImg,'\n',videoDownLoadAdd,'\n',videoPlayAdd,'\n',videoDetailContent,'\n',videoOnLinePlayAdd)
 
+def tpInsert():
+    for i in range(0,1000):
+        xxlist = VideoDataBase.session.query(VideoDataBase.TmpList).filter(VideoDataBase.TmpList.msg.like('%'+str(i)+'%')).all()
+        if len(xxlist)<=0:
+            dxx1 = VideoDataBase.TmpList(msg=str(i))
+            VideoDataBase.session.add(dxx1)
+            VideoDataBase.session.commit()
+        else:
+            print('数据已存在')
+
+
 
 if __name__ == '__main__':
     # getSraechList('007')
-    getVideoCategoryList()
+    # getVideoCategoryList()
     # getCurrentVideDetail('http://www.okzy.co//?m=vod-index-pg-1.html','1')
     # searchDataInfoById('DY')
     # getAllPageSize('http://www.okzy.co/')
 
     #爬取所有页面的数据
-    # getAllNetReqInfo()
+    getAllNetReqInfo()
     # getFilterVideoinfoById('大明')
 
     # getTest('http://www.okzy.co//?m=vod-detail-id-45018.html')

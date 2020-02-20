@@ -11,7 +11,7 @@ Bootstrap(app)
 @app.route('/')
 def hello():
 
-    return render_template('index.html',name='https://rpg.pic-imges.com/pic/upload/vod/2019-12/1576595925.jpg')
+    return render_template('index.html',name='https://upload.jianshu.io/users/upload_avatars/9390216/d054ce9c-0dfc-4c28-9d5a-e8ce047cec77.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/96/h/96/format/webp')
 
 
 #关键字搜索
@@ -39,7 +39,9 @@ def timeperMethod():
 ##############################错误或者服务器错误##################################################################################################
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'), 404
+    if request.url.find('api') != -1:
+        return jsonify({'error': '请求的资源不存在', 'code': '404', 'data': ''})
+    return render_template('error/404.html'), 404
 
 @app.errorhandler(500)
 def internal_server_error(e):

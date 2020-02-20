@@ -104,8 +104,3 @@ class TmpList(Base):
     msg = Column(String(10))
 
 
-def tpInsert():
-    for i in range(0,1000):
-        dxx1 = TmpList(msg=str(i))
-        session.add(dxx1)
-        session.commit()

@@ -24,8 +24,16 @@
 {% block content %}
 <div class="container">
     <div class="page-header">
+        <img src="{{name}}" onclick=window.open('http://www.baidu.com')>
+        <img src="{{name}}" onclick=window.open('http://www.baidu.com')>
+        <img src="{{name}}" onclick=window.open('http://www.baidu.com')>
+        <h1 ><a href="http://www.baidu.com">Hello, {{ 123 | upper}}!</a></h1>
+        <h1 ><a href="http://www.baidu.com">Hello, {{ 123 | upper}}!</a></h1>
+        <h1 ><a href="http://www.baidu.com">Hello, {{ 123 | upper}}!</a></h1>
+    </div>
+    <div class="page-header">
         <h1>Hello, {{ 123 | upper}}!</h1>
-        <img src="{{name}}" onclick='http://www.baidu.com'>
+        <img src="{{name}}" onclick=window.open('http://www.baidu.com')>
     </div>
 </div>
 {% endblock %}
