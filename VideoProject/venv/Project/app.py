@@ -1,6 +1,7 @@
 from flask import Flask,render_template,request,url_for,redirect,make_response,send_file, send_from_directory,jsonify
 from os import *
 from Project import VideoModu
+from Project import TimeMakerMethod
 from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
@@ -60,3 +61,4 @@ def ResponseMethod(code,msg,records):
 if __name__ == '__main__':
 
     app.run('0.0.0.0',debug=True,port='9527')
+    TimeMakerMethod.everyTimeRun()
