@@ -3,14 +3,18 @@ from socket import *
 ipaddr = '127.0.0.1'
 port = 8887
 
-tcp_client = socket(AF_INET, SOCK_STREAM)
+def client_start():
+    tcp_client = socket(AF_INET, SOCK_STREAM)
 
-tcp_client.connect((ipaddr, port))
+    tcp_client.connect((ipaddr, port))
 
-while True:
-    msg = input(">>>: ")
-    tcp_client.send(msg.encode("utf-8"))
-    data = tcp_client.recv(1024)
-    print("data is %s" % data.decode("utf-8"))
+    while True:
+        msg = input(">>>: ")
+        tcp_client.send(msg.encode("utf-8"))
+        data = tcp_client.recv(1024)
+        print("data is %s" % data.decode("utf-8"))
 
-tcp_client.close()
+    tcp_client.close()
+
+if __name__ == '__main__':
+    client_start()
