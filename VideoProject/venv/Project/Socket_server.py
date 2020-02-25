@@ -1,16 +1,23 @@
-import socket
+from socket import *
 
-host = '127.0.0.1'
-port = 8080
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)       # 创建一个基于网络通信的TCP协议的socket对象
-server.bind((host, port))
-server.listen(5)    # 5表示最大的同时连接数
+ipaddr = '127.0.0.1'
+port = 8000
+back_log = 5
 
-conn,addr = server.accept()  # conn表示链接；addr表示地址；返回的结果是一个元组
-msg = conn.recv(1024)   # 接受信息，1024表示接收1024个字节的信息
-print("客户端发来的消息是:%s" %msg.decode('utf-8'))
-conn.send(msg.upper())  # 发送的消息
+tcp_server = socket(AF_INET, SOCK_STREAM)
+tcp_server.bind((ipaddr, port))
+tcp_server.listen(back_log)
 
-# # 断开链接
-# conn.close()
-# server.close()
+while True:
+    conn,addr = tcp_server.accept()
+
+    while True:
+        try:
+            data = conn.recv(1024)
+            print("data is %s" %data.decode('utf-8'))
+            conn.send(data.upper())
+        except Exception:
+            break
+
+    conn.close()
+tcp_server.close()

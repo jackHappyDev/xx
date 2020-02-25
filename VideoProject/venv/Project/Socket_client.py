@@ -1,12 +1,16 @@
-import socket
+from socket import *
 
-host = '127.0.0.1'
-port = 8080
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect((host, port))
-msg = 'hello'
-client.send(msg.encode('utf-8'))
-data = client.recv(1024)
-print("服务的发来的消息：%s" %data)
+ipaddr = '127.0.0.1'
+port = 8000
 
-# client.close()
+tcp_client = socket(AF_INET, SOCK_STREAM)
+
+tcp_client.connect((ipaddr, port))
+
+while True:
+    msg = input(">>>: ")
+    tcp_client.send(msg.encode("utf-8"))
+    data = tcp_client.recv(1024)
+    print("data is %s" % data.decode("utf-8"))
+
+tcp_client.close()
