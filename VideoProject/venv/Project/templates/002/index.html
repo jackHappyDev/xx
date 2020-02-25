@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>]
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#hidden").click(function () {
+                // $("#xd").hide(1000);
+                // $("#div1").fadeIn();
+                // $("#div2").fadeIn(300);
+                // $("#div3").fadeIn(500);
+                // $("#div2").fadeIn("slow");
+                // $("#div3").fadeIn(3000);
+                $("#div1").fadeToggle();
+                $("#div2").fadeToggle(300);
+                $("#div3").fadeToggle(500);
+                var div = $("#div1");
+                div.animate({left:'120px'},'slow');
+                div.animate({fontSize:'3em'},'slow');
+                $("#xd").css("color","red").slideUp(2000).slideDown(2000);
+                // $("#div1").animate({
+                //     left:'250px',
+                //     opacity:'0.5',
+                //     width :'+=150px',
+                //     height :'+=150px',
+                // });
+               var xx =  $("#xxxd").attr("href");
+                alert(xx);
+
+                var txt ="";
+                txt += " 宽 " + $("#div1").width()+"<br>";
+                txt += " 高 " + $("#div1").height();
+                $("#div1").html(txt);
+
+
+            });
+            $("#show").click(function () {
+                // $("#xd").show(500);
+                $("#div1").fadeOut();
+                $("#div2").fadeOut(300);
+                $("#div3").fadeOut(500);
+            })
+        });
+    </script>
+</head>
+
+<body>
+<p id="xd">wille change too</p>
+<p><a href="www.baidu.com" id="xxxd"> hh这是一个链接</a></p>
+<br>
+<div id="div1" style="width: 80px;height: 80px;display: none;background-color: #24ff86;position: absolute;">hello</div>
+<br>
+<div id="div2" style="width: 80px;height: 80px;display: none;background-color: green"></div>
+<br>
+<div id="div3" style="width: 80px;height: 80px;display: none;background-color: navy"></div>
+<br>
+<button id='hidden' type="button">hidden</button>
+<button id= 'show' type="button">show</button>
+<input id="put" type="text" value=""></input>
+</body>
+</html>

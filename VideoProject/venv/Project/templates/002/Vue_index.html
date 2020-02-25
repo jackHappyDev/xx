@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <p>原始字符串：{{message}}</p>
+    <p>计算后的反转字符串：{{reversedMessage}}</p>
+    {{message.split('').reverse().join('')}}
+    <ul>
+        <li v-for="n in 10">
+            {{n}}
+        </li>
+    </ul>
+    <ul>
+        <li v-for="(value ,key,index) in object">
+            {{index}}:{{key}}:{{value}}
+        </li>
+    </ul>
+    <ul>
+       <template v-for="site in sites">
+           <li>{{site.name}}</li>
+           <li>-------------</li>
+       </template>
+    </ul>
+    <ol>
+        <li v-for = "site in sites">
+            {{site.name}}
+        </li>
+    </ol>
+</div>
+
+<script>
+    new Vue({
+        el:"#app",
+        data:{
+            sites:[
+                {name:'www.google.com'},
+                {name:'www.jd.com'},
+                {name:'www.youtube.com'},
+            ],
+            object:{
+                name:'哈哈哈',
+                url:'http://jd.com',
+                slogan:'有时候装逼 有时候装傻逼'
+            },
+            message:'Hello World!'
+        },
+        methods: {
+            reversedMessage: function () {
+                return this.message.split('').reverse().join('')
+            }
+        },
+        computed:{
+            site: {
+                get: function () {
+                    return this.name +''+this.url
+                },
+                set: function () {
+                    var  names = newValue.split(''),
+                    this.name = names[0],
+                    this.url = names[names.length - 1]
+                }
+            }
+        }
+    })
+    // vm.site = 'hello ';
+    // document.write('name:'+vm.name);
+    // document.write('<br>');
+    // document.write('url:'+vm.url);
+</script>
+
+
+
+</body>
+</html>
