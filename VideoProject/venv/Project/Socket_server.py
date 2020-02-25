@@ -21,8 +21,8 @@ def serverStart():
                 break
             # print("data is %s" %data.decode('utf-8'))
             conn.send(data.upper())
-            list = str(data.decode('utf-8')).split(':')
-            dxx = VideoDataBase.Chatlist(msg=list[1],name=list[0])
+            list = str(data.decode('utf-8')).split('*')
+            dxx = VideoDataBase.Chatlist(msg=list[1],name=list[0],time =list[2])
             VideoDataBase.session.add_all([dxx])
             VideoDataBase.session.commit()
 

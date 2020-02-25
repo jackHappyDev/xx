@@ -72,6 +72,7 @@ Chatlist = Table(
     Column('id',Integer,primary_key=True,autoincrement=True),
     Column('name',String(100)),
     Column('msg',String(1024)),
+    Column('time',String(50)),
 )
 metadata.create_all(engine)
 
@@ -117,3 +118,4 @@ class Chatlist(Base):
     id = Column(Integer,primary_key=True,autoincrement=True)
     name = Column(String(100))
     msg = Column(String(1024))
+    time = Column(String(50))
