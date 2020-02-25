@@ -14,7 +14,7 @@
     <SUITE FILE_PATH="coverage/venv$Socket_server.coverage" NAME="Socket_server Coverage Results" MODIFIED="1582623267517" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Project" />
     <SUITE FILE_PATH="coverage/venv$VideoDataBase.coverage" NAME="VideoDataBase Coverage Results" MODIFIED="1582617014542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Project" />
     <SUITE FILE_PATH="coverage/venv$VideoModu.coverage" NAME="VideoModu Coverage Results" MODIFIED="1582511142660" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/venv$Socket_client.coverage" NAME="Socket_client Coverage Results" MODIFIED="1582624219133" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Project" />
+    <SUITE FILE_PATH="coverage/venv$Socket_client.coverage" NAME="Socket_client Coverage Results" MODIFIED="1582625029757" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Project" />
     <SUITE FILE_PATH="coverage/venv$app.coverage" NAME="app Coverage Results" MODIFIED="1582347201184" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FileEditorManager">
@@ -58,8 +58,8 @@
       <file leaf-file-name="Socket_client.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Project/Socket_client.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="16" column="32" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
+            <state relative-caret-position="236">
+              <caret line="16" column="35" lean-forward="true" selection-start-line="16" selection-start-column="35" selection-end-line="16" selection-end-column="35" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -299,14 +299,13 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1680" y="0" width="1920" height="1080" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Python Console" order="10" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.35323384" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.53432834" />
       <window_info anchor="bottom" id="Terminal" order="11" />
       <window_info content_ui="combo" id="Project" order="0" weight="0.1315229" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
@@ -527,8 +526,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Project/Socket_client.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="16" column="32" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
+        <state relative-caret-position="236">
+          <caret line="16" column="35" lean-forward="true" selection-start-line="16" selection-start-column="35" selection-end-line="16" selection-end-column="35" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
           </folding>

@@ -13,7 +13,7 @@ def client_start():
 
     while True:
         msg = input(">>>: ")
-        if len(msg)<=0:
+        if len(msg)==0 or msg.isspace()==True:
             msg = input(">>>: ")
         msg = name + ':' + msg
         tcp_client.send(msg.encode("utf-8"))
