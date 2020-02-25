@@ -1,7 +1,7 @@
 from socket import *
 
 ipaddr = '127.0.0.1'
-port = 8000
+port = 8887
 
 tcp_client = socket(AF_INET, SOCK_STREAM)
 
