@@ -67,6 +67,14 @@ TmpList = Table(
 )
 metadata.create_all(engine)
 
+Chatlist = Table(
+    'Chatlist',metadata,
+    Column('id',Integer,primary_key=True,autoincrement=True),
+    Column('name',String(100)),
+    Column('msg',String(1024)),
+)
+metadata.create_all(engine)
+
 
 
 class MoviesInfo(Base):
@@ -104,3 +112,8 @@ class TmpList(Base):
     msg = Column(String(10))
 
 
+class Chatlist(Base):
+    __tablename__ = 'chatlist'
+    id = Column(Integer,primary_key=True,autoincrement=True)
+    name = Column(String(100))
+    msg = Column(String(1024))

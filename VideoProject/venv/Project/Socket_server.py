@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 #-*- conding: utf-8-
 # https://www.jianshu.com/p/a550673a4a25
-
 from socket import *
+from Project import VideoDataBase
 
 ipaddr = '127.0.0.1'
 port = 8887
@@ -19,8 +19,12 @@ def serverStart():
             data = conn.recv(1024)
             if not data:
                 break
-            print("data is %s" %data.decode('utf-8'))
+            # print("data is %s" %data.decode('utf-8'))
             conn.send(data.upper())
+            list = str(data.decode('utf-8')).split(':')
+            dxx = VideoDataBase.Chatlist(msg=list[1],name=list[0])
+            VideoDataBase.session.add_all([dxx])
+            VideoDataBase.session.commit()
 
         conn.close()
     tcp_server.close()
