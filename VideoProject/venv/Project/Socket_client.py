@@ -13,6 +13,8 @@ def client_start():
 
     while True:
         msg = input(">>>: ")
+        if len(msg)<=0:
+            msg = input(">>>: ")
         msg = name + ':' + msg
         tcp_client.send(msg.encode("utf-8"))
         data = tcp_client.recv(1024)

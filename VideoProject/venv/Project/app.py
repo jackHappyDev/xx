@@ -3,6 +3,7 @@ from os import *
 from Project import VideoModu
 from Project import TimeMakerMethod
 from flask_bootstrap import Bootstrap
+from Project import Socket_client
 
 app = Flask(__name__)
 
@@ -29,6 +30,12 @@ def getFrontpage():
     list = VideoModu.getVideoCategoryList()
     dt = ResponseMethod(0, 'ok', list)
     return jsonify(dt)
+
+
+@app.route('/startChat')
+def startChat():
+    Socket_client.client_start()
+
 
 
 #定时采集数据到数据库
