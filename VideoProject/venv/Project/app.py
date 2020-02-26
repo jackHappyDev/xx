@@ -43,8 +43,10 @@ def register():
     # get_data = json.loads(request.get_data(as_text=True))
     username = request.form['name']
     password = request.form['word']
+    file = request.files['file']
+
     print(username,password)
-    return jsonify({'username':username,'password':password}),201
+    return jsonify({'username':username,'password':password,'files':file.filename}),201
 
 
 #定时采集数据到数据库
