@@ -6,6 +6,7 @@ port = 8887
 
 name = ""
 
+
 def client_start():
     name = radomName()
     tcp_client = socket(AF_INET, SOCK_STREAM)
@@ -25,12 +26,16 @@ def client_start():
     tcp_client.close()
 
 def radomName():
-    r = ["张三","李四","王五","赵麻子"]
-    x = random.randint(0, 3)
-    if len(name)<=0:
-        return r[x]
-    else:
-        pass
+    global name
+    if len(name)<=0 :
+        name = input("请输入您的名字:")
+        return name
+    # r = ["张三","李四","王五","赵麻子"]
+    # x = random.randint(0, 3)
+    # if len(name)<=0:
+    #     return r[x]
+    # else:
+    #     pass
 
 if __name__ == '__main__':
     client_start()
