@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request,url_for,redirect,make_response,send_file, send_from_directory,jsonify
+from flask import Flask,render_template,request,url_for,redirect,make_response,send_file, send_from_directory,jsonify,json
 from os import *
 from Project import VideoModu
 from Project import TimeMakerMethod
@@ -6,6 +6,8 @@ from flask_bootstrap import Bootstrap
 from Project import Socket_client
 
 app = Flask(__name__)
+
+app.config['JSON_AS_ASCII'] = False
 
 Bootstrap(app)
 
@@ -31,11 +33,18 @@ def getFrontpage():
     dt = ResponseMethod(0, 'ok', list)
     return jsonify(dt)
 
-
+#开始聊天用于H5调用
 @app.route('/startChat')
 def startChat():
     Socket_client.client_start()
 
+@app.route('/register',methods=['POST'])
+def register():
+    # get_data = json.loads(request.get_data(as_text=True))
+    username = request.form['name']
+    password = request.form['word']
+    print(username,password)
+    return jsonify({'username':username,'password':password}),201
 
 
 #定时采集数据到数据库
@@ -45,15 +54,15 @@ def timeperMethod():
     pass
 
 ##############################错误或者服务器错误##################################################################################################
-@app.errorhandler(404)
-def page_not_found(e):
-    if request.url.find('api') != -1:
-        return jsonify({'error': '请求的资源不存在', 'code': '404', 'data': ''})
-    return render_template('error/404.html'), 404
-
-@app.errorhandler(500)
-def internal_server_error(e):
-    return render_template('500.html'), 500
+# @app.errorhandler(404)
+# def page_not_found(e):
+#     if request.url.find('api') != -1:
+#         return jsonify({'error': '请求的资源不存在', 'code': '404', 'data': ''})
+#     return render_template('error/404.html'), 404
+#
+# @app.errorhandler(500)
+# def internal_server_error(e):
+#     return render_template('500.html'), 500
 
 def ResponseMethod(code,msg,records):
     data = {
@@ -68,4 +77,4 @@ def ResponseMethod(code,msg,records):
 if __name__ == '__main__':
 
     app.run('0.0.0.0',debug=True,port='9527')
-    TimeMakerMethod.everyTimeRun()
+    # TimeMakerMethod.everyTimeRun()
