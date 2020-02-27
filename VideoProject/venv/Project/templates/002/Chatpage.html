@@ -118,7 +118,17 @@
                 option1.html(text);
                 $("#rightcontent").append(option1);
                 // alert(text);
+                $.ajax({
+                    type: "GET",
+                    url: "http://192.168.0.190:9527/startChat",
+                    data: { text: text},
+                    dataType: "JSON",
+                    success: function(result) {
+                        
+                    }
+                });
                 //5. 清除文本框的内容
+
                 $("#leftText").val("");
             }
 
