@@ -18,7 +18,9 @@
             url: "http://192.168.0.190:9527/startChat",
             data: { text: $("#text").val()},
             dataType: "JSON",
-            success: function(result) {}
+            success: function(result) {
+                $("#text").val("");
+            }
         });
     }
 </script>
