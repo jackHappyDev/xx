@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset = "utf-8"/>
+    <title>模仿微信聊天</title>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+    <style type="text/css">
+        *{
+            margin: 0px;
+            padding: 0px;
+        }
+
+        #main{
+            width: 90%;
+            margin: 10px auto;
+        }
+        #box{
+            float: left;
+            margin:20px 120px;
+        }
+
+        #top{
+            width: 310px;
+            padding: 10px 20px;
+            color: white;
+            background-color: lightgreen;
+            font-size: 18px;
+            font-family: "微软雅黑";
+            font-weight: bold;
+        }
+
+        #content{
+            background-color: white;
+        }
+
+        select{
+            width: 350px;
+            height: 470px;
+            background-color: white;
+            padding: 10px;
+            border:2px solid red;
+
+        }
+
+        #bottom{
+            width: 310px;
+            background-color: red;
+            padding: 10px 20px;
+        }
+
+        .sendText{
+            height: 25px;
+            width: 210px;
+            font-size: 16px;
+        }
+
+        .sendBtn{
+            width: 65px;
+            height: 30px;
+
+            float: right;
+            background-color: gold;
+            color: white;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        span{
+            background-color: lightgreen;
+            color: #000;
+            padding: 10px 30px;
+
+        }
+        option{
+            padding: 5px 10px;
+            margin-top:10px;
+            border-radius:5px;
+            width: 10px;
+            min-height: 20px;
+        }
+
+        .optionRight{
+            background-color: lightgreen;
+        }
+
+        .optionLeft{
+            background-color: lightblue;
+        }
+    </style>
+
+    <script>
+        $(function(){
+
+            $("#leftdBtn").bind("click", sendLeft);
+            $("#rightBtn").bind("click", sendRight);
+
+            function sendLeft(){
+
+                //1. 获取输入框中的内容
+                var text = $("#leftText").val();
+                //2. 生成标签
+                var option = $("<option></option>");
+                option.addClass("optionLeft");
+                //2.1 生成标签的样式
+                var len = text.length;
+                //option.css("width", len * 15 + "px","marginLeft", 350 - len * 15 - 60 + "px")
+                option.css("width", len * 15 + "px");
+                option.css("marginLeft", 350 - len * 15 - 60 + "px");
+                //2.2 生成标签的内容
+                option.html(text);
+                //3. 将内容追加到select中。
+                $("#leftcontent").append(option);
+                //4. 追加生成的标签(右侧)
+                var option1 = $("<option></option>");
+                option1.addClass("optionRight");
+                option1.css("width", len * 15 + "px");
+                option1.css("marginLeft", 10 +"px");
+                option1.html(text);
+                $("#rightcontent").append(option1);
+
+                //5. 清除文本框的内容
+                $("#leftText").val("");
+            }
+
+
+            function sendRight(){
+
+                //1. 获取输入框中的内容
+                var text = $("#rightText").val();
+                //2. 生成标签
+                var option = $("<option></option>");
+                option.addClass("optionLeft");
+                //2.1 生成标签的样式
+                var len = text.length;
+                //option.css("width", len * 15 + "px","marginLeft", 350 - len * 15 - 60 + "px")
+                option.css("width", len * 15 + "px");
+                option.css("marginLeft", 350 - len * 15 - 60 + "px");
+                //2.2 生成标签的内容
+                option.html(text);
+                //3. 将内容追加到select中。
+                $("#rightcontent").append(option);
+                //4. 追加生成的标签(右侧)
+                var option1 = $("<option></option>");
+                option1.addClass("optionRight");
+                option1.css("width", len * 15 + "px");
+                option1.css("marginLeft", 10 +"px");
+                option1.html(text);
+                $("#leftcontent").append(option1);
+
+                $("#rightText").val("");
+            }
+
+
+            $(document).keydown(function(event){
+
+                var txt1 = $("#leftText").val();
+                var txt2 = $("#rightText").val()
+                if(event.keyCode == 13){
+                    if( txt1.trim() != ""){
+                        sendLeft();
+                    }
+                    if(txt2.trim() != ""){
+                        sendRight();
+                    }
+                }
+            });
+        })
+    </script>
+</head>
+<body>
+<div id = "main">
+    <div id = "box">
+        <div id = "top"><span>你</span></div>
+        <div id = "content">
+            <select multiple="multiple" id="leftcontent">
+
+            </select>
+        </div>
+        <div id = "bottom">
+            <input type = "text" class = "sendText" id = "leftText" />
+            <input type = "button" id = "leftdBtn" class="sendBtn" value = "发送">
+        </div>
+    </div>
+
+    <div id = "box">
+        <div id = "top"><span>同桌</span></div>
+        <div id = "content">
+            <select multiple="multiple" id="rightcontent">
+
+            </select>
+        </div>
+        <div id = "bottom">
+            <input type = "text" class = "sendText" id = "rightText" />
+            <input type = "button" id = "rightBtn" class="sendBtn" value = "发送">
+        </div>
+    </div>
+</div>
+</body>
+</html>
