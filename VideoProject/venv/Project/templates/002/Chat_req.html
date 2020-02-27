@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>GET、POST</title>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+</head>
+<body>
+<input type="text" name="text" id="text" />
+<input type="button" value="Submit" onclick="submit()" />
+</body>
+<script>
+    function submit() {
+        $.ajax({
+            type: "GET",
+            url: "http://192.168.0.190:9527/startChat",
+            data: { text: $("#text").val()},
+            dataType: "JSON",
+            success: function(result) {}
+        });
+    }
+</script>
+</html>

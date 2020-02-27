@@ -34,9 +34,10 @@ def getFrontpage():
     return jsonify(dt)
 
 #开始聊天用于H5调用
-@app.route('/startChat')
+@app.route('/startChat',methods=['POST','GET'])
 def startChat():
-    Socket_client.client_start()
+    kw = request.args.get('text')
+    Socket_client.net_client_start(kw)
 
 @app.route('/register',methods=['POST'])
 def register():
