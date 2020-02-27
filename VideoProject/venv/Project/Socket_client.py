@@ -5,7 +5,7 @@ ipaddr = '127.0.0.1'
 port = 8887
 
 name = ""
-
+# https://github.com/Pithikos/python-websocket-server
 
 def client_start():
     name = radomName()
