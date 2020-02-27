@@ -60,7 +60,7 @@
 
     if ("WebSocket" in window){
         console.log("您的浏览器支持 WebSocket!");
-        var ws = new WebSocket("ws://127.0.0.1:8887");
+        var ws = new WebSocket("ws://127.0.0.1:8887/");
         //var ws = new WebSocket("ws://localhost:9001");
         ws.onopen = function(){
             console.log("websocket 已连接上");

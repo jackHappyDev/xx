@@ -6,6 +6,7 @@ port = 8887
 
 name = ""
 # https://github.com/Pithikos/python-websocket-server
+# https://www.jianshu.com/p/3b1397617cd4
 
 def client_start():
     name = radomName()
