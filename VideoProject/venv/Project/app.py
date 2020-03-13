@@ -15,8 +15,7 @@ Bootstrap(app)
 @app.route('/')
 def hello():
 
-    return render_template('index.html',name='https://upload.jianshu.io/users/upload_avatars/9390216/d054ce9c-0dfc-4c28-9d5a-e8ce047cec77.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/96/h/96/format/webp')
-
+    return render_template('index.html')
 
 #关键字搜索
 @app.route('/videoSearch/',methods=['POST','GET'])

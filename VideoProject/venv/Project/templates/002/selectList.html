@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <select v-model="selected" name="fruit">
+        <option value="">选择一个网站</option>
+        <option value="wwww.runoob.com">Runoob</optionv>
+        <option value="www.google.com">Google</option>
+    </select>
+
+    <div id="output">
+        选择的网站是:{{selected}}
+    </div>
+</div>
+<script>
+    new Vue({
+        el:'#app',
+        data:{
+            selected:''
+        }
+    })
+</script>
+
+</body>
+</html>
