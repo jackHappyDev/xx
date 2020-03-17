@@ -84,7 +84,8 @@
 		
 		  var safeVC = require('PTSafeViewController').alloc().init();
 		  self.navigationController().pushViewController_animated(safeVC, YES);
-		  
+
+##修复数据	  
 		
 ###NSUserDefaults 本地存储
 		require('NSUserDefaults').standardUserDefaults().setObject_forKey("123", "456");
@@ -95,6 +96,26 @@
 		
 		 var str = self.agentModel().myQQPopularizeUrl();
 		 console.log('model*******',str);
+
+###动态新增属性字段
+		defineClass("JPTableViewController", ['data', 'totalCount'], {
+		  init: function() {
+		     self = self.super().init()
+		     self.setData(["a", "b"])     //添加新的 Property (id data)
+		     self.setTotalCount(2)
+		     return self
+		  },
+		  viewDidLoad: function() {
+		     var data = self.data()     //获取 Property 值
+		     var totalCount = self.totalCount()
+		  },
+		})
+
+###加载动态库（插件化）
+	
+		var bundle = NSBundle.bundleWithPath("/System/Library/Frameworks/SafariServices.framework");
+	bundle.load();
+
 
 #修复调用方法defineClass重写该方法
 	
@@ -143,16 +164,10 @@
 	        self.super().viewDidLoad();
 	        self.setUpUI();
 	        self.initWebData();
-	        var width = require('UIScreen').mainScreen().bounds().width;
-	        var heigth = require('UIScreen').mainScreen().bounds().height;
-	        var btn = require('UIButton').alloc().initWithFrame({x:000, y:(heigth-150), width:300, height:150});
-	        btn.setTitle_forState('这个按钮是通过JSPatch动态添加上去的啊', 0);
-	        btn.addTarget_action_forControlEvents(self, "handleBtn:", 1 << 6);
-	        btn.setBackgroundColor(require('UIColor').grayColor());
-	        self.myAgentView().addSubview(btn);
-	        var v = require('UIImageView').alloc().initWithFrame({x:200, y:(heigth-150), width:300, height:150});
-	        self.myAgentView().addSubview(v);
-	        v.sd__setImageWithURL(require('NSURL').URLWithString('https://onevcat.com/assets/images/avatar.jpg'));
+        
+        self.initBtn();
+        self.initView();
+        
        
         console.log("代理页面viewDidLoad JSPatch调用");
     },
@@ -161,6 +176,24 @@
         var pasteboard = require('UIPasteboard').generalPasteboard();
         pasteboard.setString('这是动态添加的按钮响应事件');
         require('MBProgressHUD').showSuccess_toView("复制成功", null);
+
+    },
+    initBtn: function() {
+            var width = require('UIScreen').mainScreen().bounds().width;
+            var heigth = require('UIScreen').mainScreen().bounds().height;
+            var btn = require('UIButton').alloc().initWithFrame({x:000, y:(heigth-350), width:300, height:150});
+            btn.setTitle_forState('这个按钮是通过JSPatch动态添加上去的啊', 0);
+            btn.addTarget_action_forControlEvents(self, "handleBtn:", 1 << 6);
+            btn.setBackgroundColor(require('UIColor').grayColor());
+            self.myAgentView().addSubview(btn);
+    },
+    initView: function() {
+            var width = require('UIScreen').mainScreen().bounds().width;
+            var heigth = require('UIScreen').mainScreen().bounds().height;
+            var v = require('UIImageView').alloc().initWithFrame({x:200, y:(heigth-350), width:300, height:150});
+            self.myAgentView().addSubview(v);
+            v.sd__setImageWithURL(require('NSURL').URLWithString('https://onevcat.com/assets/images/avatar.jpg'));
+            
     },
     initWebData: function() {
         console.log("代理页面 JSPatch调用");
@@ -171,10 +204,116 @@
 	}, {});
 
 
+
 ...未完待续
 
 
+                    编译library的脚本
 
+
+                    #!/bin/sh
+
+                    #要build的target名
+                    target_Name=${PROJECT_NAME}
+                    if [[ $1 ]]
+                    then
+                    target_Name=$1
+                    fi
+
+                    UNIVERSAL_OUTPUT_FOLDER="${SRCROOT}/${PROJECT_NAME}_Products"
+
+                    # 创建输出目录，并删除之前的文件
+                    rm -rf "${UNIVERSAL_OUTPUT_FOLDER}"
+                    mkdir -p "${UNIVERSAL_OUTPUT_FOLDER}"
+
+                    # 分别编译真机和模拟器版本
+                    xcodebuild -target "${target_Name}" ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos  BUILD_DIR="${BUILD_DIR}" BUILD_ROOT="${BUILD_ROOT}" clean build
+                    xcodebuild -target "${target_Name}" ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphonesimulator BUILD_DIR="${BUILD_DIR}" BUILD_ROOT="${BUILD_ROOT}" clean build
+
+                    #复制头文件到目标文件夹
+                    HEADER_FOLDER="${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/include/${target_Name}"
+                    if [[ -d "${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/usr/local/include" ]]
+                    then
+                        HEADER_FOLDER="${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/usr/local/include"
+                    fi
+                    cp -R "${HEADER_FOLDER}" "${UNIVERSAL_OUTPUT_FOLDER}"
+
+                    #合成模拟器和真机.a包
+                    lipo -create "${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/lib${target_Name}.a" "${BUILD_DIR}/${CONFIGURATION}-iphoneos/lib${target_Name}.a" -output "${UNIVERSAL_OUTPUT_FOLDER}/lib${target_Name}.a"
+
+                    # 判断build文件夹是否存在，存在则删除
+                    if [ -d "${SRCROOT}/build" ]
+                    then
+                    rm -rf "${SRCROOT}/build"
+                    fi
+
+                    #打开目标文件夹
+                    open "${UNIVERSAL_OUTPUT_FOLDER}"
+
+
+
+
+
+
+
+
+                    编译framework的shell脚本
+                    
+                    
+
+
+                    #!/bin/sh
+                    #要build的target名
+                    TARGET_NAME=${PROJECT_NAME}
+                    if [[ $1 ]]
+                    then
+                    TARGET_NAME=$1
+                    fi
+                    UNIVERSAL_OUTPUT_FOLDER="${SRCROOT}/${PROJECT_NAME}_Products/"
+
+                    #创建输出目录，并删除之前的framework文件
+                    mkdir -p "${UNIVERSAL_OUTPUT_FOLDER}"
+                    rm -rf "${UNIVERSAL_OUTPUT_FOLDER}/${TARGET_NAME}.framework"
+
+                    #分别编译模拟器和真机的Framework
+                    xcodebuild -target "${TARGET_NAME}" ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos BUILD_DIR="${BUILD_DIR}" BUILD_ROOT="${BUILD_ROOT}" clean build
+                    xcodebuild -target "${TARGET_NAME}" ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphonesimulator BUILD_DIR="${BUILD_DIR}" BUILD_ROOT="${BUILD_ROOT}" clean build
+
+                    #拷贝framework到univer目录
+                    cp -R "${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/${TARGET_NAME}.framework" "${UNIVERSAL_OUTPUT_FOLDER}"
+
+                    #合并framework，输出最终的framework到build目录
+                    lipo -create -output "${UNIVERSAL_OUTPUT_FOLDER}/${TARGET_NAME}.framework/${TARGET_NAME}" "${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/${TARGET_NAME}.framework/${TARGET_NAME}" "${BUILD_DIR}/${CONFIGURATION}-iphoneos/${TARGET_NAME}.framework/${TARGET_NAME}"
+
+                    #删除编译之后生成的无关的配置文件
+                    dir_path="${UNIVERSAL_OUTPUT_FOLDER}/${TARGET_NAME}.framework/"
+                    for file in ls $dir_path
+                    do
+                    if [[ ${file} =~ ".xcconfig" ]]
+                    then
+                    rm -f "${dir_path}/${file}"
+                    fi
+                    done
+
+                    #判断build文件夹是否存在，存在则删除
+                    if [ -d "${SRCROOT}/build" ]
+                    then
+                    rm -rf "${SRCROOT}/build"
+                    fi
+
+                    rm -rf "${BUILD_DIR}/${CONFIGURATION}-iphonesimulator" "${BUILD_DIR}/${CONFIGURATION}-iphoneos"
+
+                    #打开合并后的文件夹
+                    open "${UNIVERSAL_OUTPUT_FOLDER}"
+
+                    6人点赞
+                    iOS
+
+
+                    作者：Ro_bber
+                    链接：https://www.jianshu.com/p/fffc55967f70
+                    来源：简书
+                    著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 
 
